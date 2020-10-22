@@ -1,16 +1,13 @@
 import React from "react";
-import Header from "../ui/Header";
-import Navigation from "../ui/Navigation";
 import AppTemplate from "../ui/AppTemplate";
 import { Link } from "react-router-dom";
 import saveIcon from "../../icons/save.svg";
+import memoryCards from "../../mock-data/memory-cards";
+const memoryCard = memoryCards[2];
 
 export default function Edit() {
    return (
       <AppTemplate>
-         <Header />
-         <Navigation />
-
          <p className="text-center lead text-muted my-2">Edit card</p>
 
          <div className="card">
@@ -18,13 +15,17 @@ export default function Edit() {
                <textarea
                   rows="6"
                   id="edit-imagery-input"
-                  autoFocus={true}
+                  defaultValue={memoryCard.imagery}
                ></textarea>
             </div>
          </div>
          <div className="card">
             <div className="card-body bg-secondary lead">
-               <textarea rows="6" id="edit-answer-input"></textarea>
+               <textarea
+                  rows="6"
+                  id="edit-answer-input"
+                  defaultValue={memoryCard.answer}
+               ></textarea>
             </div>
          </div>
 
@@ -73,10 +74,10 @@ export default function Edit() {
                <p className="text-muted mt-1">Consecutives:</p>
             </div>
             <div className="col-8">
-               <p className="mt-1">Dec. 24, 2019</p>
-               <p className="mt-1">Dec. 31, 2019</p>
-               <p className="mt-1">Jul. 14, 2020</p>
-               <p className="mt-1">4</p>
+               <p className="mt-1">{memoryCard.createdAt}</p>
+               <p className="mt-1">{memoryCard.lastAttemptAt}</p>
+               <p className="mt-1">{memoryCard.nextAttemptAt}</p>
+               <p className="mt-1">{memoryCard.totalSuccessfulAttempts}</p>
             </div>
          </div>
 

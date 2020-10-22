@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../ui/Header";
-import Navigation from "../ui/Navigation";
+
 import AppTemplate from "../ui/AppTemplate";
 import { Link } from "react-router-dom";
 import saveIcon from "../../icons/save.svg";
@@ -8,9 +7,6 @@ import saveIcon from "../../icons/save.svg";
 export default function CreateImagery() {
    return (
       <AppTemplate>
-         <Header />
-         <Navigation />
-
          <p className="text-center lead text-muted my-2">
             Add memorable imagery
          </p>

@@ -1,16 +1,11 @@
 import React from "react";
 import thumbsUpIcon from "../../icons/thumbs-up.svg";
-import Header from "../ui/Header";
-import Navigation from "../ui/Navigation";
 import AppTemplate from "../ui/AppTemplate";
 import { Link } from "react-router-dom";
 
 export default function ReviewAnswer() {
    return (
       <AppTemplate>
-         <Header />
-         <Navigation />
-
          <div className="card">
             <div className="card-body bg-primary lead">
                One morning, when Gregor Samsa woke from troubled dreams, he
