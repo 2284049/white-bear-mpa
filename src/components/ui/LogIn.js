@@ -13,7 +13,7 @@ export default function LogIn() {
                   </p>
                   <div className="form-group">
                      <label
-                        htmlFor="email-input"
+                        htmlFor="login-email-input"
                         className="text-muted lead font-sans-serif"
                      >
                         Email address
@@ -21,12 +21,12 @@ export default function LogIn() {
                      <input
                         type="email"
                         className="form-control"
-                        id="email-input"
+                        id="login-email-input"
                      />
                   </div>
                   <div className="form-group">
                      <label
-                        htmlFor="password-input"
+                        htmlFor="login-password-input"
                         className="text-muted lead font-sans-serif"
                      >
                         Password
@@ -34,7 +34,7 @@ export default function LogIn() {
                      <input
                         type="email"
                         className="form-control"
-                        id="password-input"
+                        id="login-password-input"
                      />
                   </div>
                   <Link
