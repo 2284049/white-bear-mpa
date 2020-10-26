@@ -54,7 +54,7 @@ export default class AllCards extends React.Component {
          ...JSON.parse(this.state.orderSelection) // removes string quotation marks on outside: ["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]
       );
       this.setState({
-         displayedemoryCards: orderedMemoryCards,
+         displayedMemoryCards: orderedMemoryCards,
       }); // orderSelection now displays as "hardest"
       // memoryCards is being sorted by ["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]
    }
