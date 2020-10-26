@@ -1,6 +1,8 @@
 import React from "react";
 // import { Link } from "react-router-dom";
 import classnames from "classnames";
+import hash from "object-hash";
+import { v4 as getUuid } from "uuid";
 
 export default class SignUp extends React.Component {
    // this function turned into a class will have a bunch of functions in it
@@ -21,7 +23,7 @@ export default class SignUp extends React.Component {
       });
    }
 
-   setEmailState(emailInput) {
+   async setEmailState(emailInput) {
       const lowerCasedEmail = emailInput.toLowerCase(); // make their input lowercase
       // eslint-disable-next-line
       const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -51,8 +53,8 @@ export default class SignUp extends React.Component {
       else return passwordInput.includes(localPart); // if this is true, it returns true; if it's false, it returns false
    }
 
-   setPasswordState(passwordInput, emailInput) {
-      const uniqChars = [...new Set(passwordInput)];
+   async setPasswordState(passwordInput, emailInput) {
+      const uniqChars = [...new Set(passwordInput)]; // puts all unique characters into an array
       if (passwordInput === "") {
          this.setState({
             passwordError: "Please create a password.", // display this error
@@ -79,17 +81,23 @@ export default class SignUp extends React.Component {
       }
    }
 
-   validateAndCreateUser() {
+   async validateAndCreateUser() {
       const emailInput = document.getElementById("signup-email-input").value; // get the user email input
-      this.setEmailState(emailInput);
+      await this.setEmailState(emailInput);
       const passwordInput = document.getElementById("signup-password-input")
          .value;
-      this.setPasswordState(passwordInput, emailInput);
+      await this.setPasswordState(passwordInput, emailInput);
       if (
          this.state.hasPasswordError === false &&
          this.state.hasPasswordError === false
       ) {
-         console.log("VALID!");
+         const user = {
+            id: getUuid(),
+            email: emailInput,
+            password: hash(passwordInput),
+            createdAt: Date.now(),
+         };
+         console.log(user);
       }
    }
 
