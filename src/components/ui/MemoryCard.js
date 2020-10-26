@@ -7,10 +7,10 @@ export default function MemoryCard(props) {
       <div className="d-flex align-items-start mb-5">
          <div className="app-card flex-fill">
             <div className="card">
-               <div className="card-body bg-primary">{props.pizza}</div>
+               <div className="card-body bg-primary">{props.banana}</div>
             </div>
             <div className="card">
-               <div className="card-body bg-secondary">{props.bananas}</div>
+               <div className="card-body bg-secondary">{props.pizza}</div>
             </div>
          </div>
          <Link to="/edit" className="btn btn-link ml-4 d-flex mt-n2">

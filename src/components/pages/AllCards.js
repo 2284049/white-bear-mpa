@@ -2,24 +2,61 @@ import React from "react";
 import AppTemplate from "../ui/AppTemplate";
 import MemoryCard from "../ui/MemoryCard";
 import memoryCards from "../../mock-data/memory-cards";
+import orderBy from "lodash/orderBy";
 
 export default class AllCards extends React.Component {
    constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+         orderSelection: '[["createdAt"], ["desc"]]', // choosing from the dropdown "most recent"
+         displayedMemoryCards: orderBy(memoryCards, ["createdAt"], ["desc"]), // setting the order of the cards to the most recent parameters
+         allMemoryCards: orderBy(memoryCards, ["createdAt"], ["desc"]),
+      };
+   }
 
-      // EASY CARDS
-      // orderBy([totalSuccessfulAttempts, createdAt], [desc, desc])
-      // order by total sucessful attempts first in desc order,
-      // and then order by created at in desc order
+   filterByInput() {
+      const input = document.getElementById("search-input").value;
+      const lowerCasedInput = input.toLowerCase();
+      console.log(lowerCasedInput);
+      const copyOfAllMemoryCards = [...this.state.allMemoryCards];
+      const filteredMemoryCards = copyOfAllMemoryCards.filter((memoryCard) => {
+         const lowerCasedImagery = memoryCard.imagery.toLowerCase();
+         const lowerCasedAnswer = memoryCard.answer.toLowerCase();
 
-      // HARD CARDS
-      // orderBy([totalSuccessfulAttempts, createdAt], [asc, asc])
+         if (
+            lowerCasedImagery.includes(lowerCasedInput) ||
+            lowerCasedAnswer.includes(lowerCasedInput)
+         ) {
+            return true;
+         } else return false;
+      });
+      this.setState({ displayedMemoryCards: filteredMemoryCards }, () => {
+         this.setMemoryCards();
+      });
+   }
 
-      // going to reset the successful attempts to 0 if they get it wrong
+   setOrderSelection(e) {
+      const newOrder = e.target.value; // '["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]'
+      this.setState(
+         {
+            orderSelection: newOrder,
+         },
+         () => {
+            this.setMemoryCards();
+         }
+      );
+   }
 
-      // Most Recent
-      // orderBy(createdAt, desc)
+   setMemoryCards() {
+      const copyOfDisplayedMemoryCards = [...this.state.displayedMemoryCards];
+      const orderedMemoryCards = orderBy(
+         copyOfDisplayedMemoryCards,
+         ...JSON.parse(this.state.orderSelection) // removes string quotation marks on outside: ["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]
+      );
+      this.setState({
+         displayedemoryCards: orderedMemoryCards,
+      }); // orderSelection now displays as "hardest"
+      // memoryCards is being sorted by ["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]
    }
 
    render() {
@@ -31,10 +68,14 @@ export default class AllCards extends React.Component {
                      className="form-control form-control-sm"
                      type="text"
                      placeholder="Search for a word"
+                     id="search-input"
                   />
                </div>
                <div className="col-4">
-                  <button className="btn btn-primary btn-block btn-sm">
+                  <button
+                     className="btn btn-primary btn-block btn-sm"
+                     onClick={() => this.filterByInput()}
+                  >
                      Search
                   </button>
                </div>
@@ -45,15 +86,25 @@ export default class AllCards extends React.Component {
                   <p className="text-muted mt-1">Sort cards by</p>
                </div>
                <div className="col-8">
-                  <select className="form-control form-control-sm">
-                     <option>Most recent</option>
-                     <option>Oldest</option>
-                     <option>Hardest</option>
-                     <option>Easiest</option>
+                  <select
+                     value={this.state.orderSelection}
+                     className="form-control form-control-sm"
+                     onChange={(e) => this.setOrderSelection(e)}
+                  >
+                     <option value='[["createdAt"], ["desc"]]'>
+                        Most recent
+                     </option>
+                     <option value='[["createdAt"], ["asc"]]'>Oldest</option>
+                     <option value='[["totalSuccessfulAttempts", "createdAt"], ["asc", "desc"]]'>
+                        Hardest
+                     </option>
+                     <option value='[["totalSuccessfulAttempts", "createdAt"], ["desc", "desc"]]'>
+                        Easiest
+                     </option>
                   </select>
                </div>
             </div>
-            {memoryCards.map((memoryCard) => {
+            {this.state.displayedMemoryCards.map((memoryCard) => {
                return (
                   <MemoryCard
                      pizza={memoryCard.answer}

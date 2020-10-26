@@ -2,8 +2,10 @@ import React from "react";
 import classnames from "classnames";
 import hash from "object-hash";
 import { v4 as getUuid } from "uuid";
+import { withRouter } from "react-router-dom";
+import { EMAIL_REGEX } from "../../utils/helpers";
 
-export default class LogIn extends React.Component {
+class LogIn extends React.Component {
    // this function turned into a class will have a bunch of functions in it
    constructor(props) {
       super(props);
@@ -17,16 +19,13 @@ export default class LogIn extends React.Component {
 
    async setEmailState(emailInput) {
       const lowerCasedEmail = emailInput.toLowerCase(); // make their input lowercase
-      // eslint-disable-next-line
-      const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      // this regex is for a valid email addres
       if (emailInput === "")
          // if the email input is blank,
          this.setState({
             emailError: "Please enter your email address.", // display this error
             hasEmailError: true, // make the input box red with is-invalid class
          });
-      else if (!emailRegex.test(lowerCasedEmail)) {
+      else if (!EMAIL_REGEX.test(lowerCasedEmail)) {
          // if email does not follow regex format,
          this.setState({
             emailError: "Please enter a valid email address.", //display this error
@@ -66,6 +65,11 @@ export default class LogIn extends React.Component {
             loggedInAt: Date.now(),
          };
          console.log(user);
+         // TO TAKE THE VALIDATED USER TO NEXT PAGE
+         // First, put up top: import { withRouter } from "react-router-dom";
+         // take out the export defult at top and put on bottom of page like this: export default withRouter(LogIn);
+         // use this code to tell it which page to go to:
+         this.props.history.push("/create-answer");
       }
    }
 
@@ -124,7 +128,6 @@ export default class LogIn extends React.Component {
                         )}
                      </div>
                      <button
-                        to="/create-answer"
                         type="password"
                         className="float-right btn btn-success btn-lg font-sans-serif"
                         onClick={() => {
@@ -140,3 +143,5 @@ export default class LogIn extends React.Component {
       );
    }
 }
+
+export default withRouter(LogIn);

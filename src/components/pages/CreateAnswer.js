@@ -17,11 +17,6 @@ export default function CreateAnswer() {
                      <!-- Autofocus is an attribute so the cursor is
                         automatically blinking when the page loads. -->
                      <!-- Commenting the first textarea out, to focus on character counts */}
-               <textarea
-                  rows="11"
-                  className="d-md-none"
-                  autoFocus={true}
-               ></textarea>
 
                <textarea
                   rows="6"
