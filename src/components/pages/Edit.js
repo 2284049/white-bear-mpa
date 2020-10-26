@@ -5,7 +5,11 @@ import saveIcon from "../../icons/save.svg";
 import memoryCards from "../../mock-data/memory-cards";
 import toDisplayDate from "date-fns/format"; // downloaded library date-fns
 import classnames from "classnames";
-import { checkIsOver, MAX_CARD_CHARS } from "../../utils/helpers";
+import {
+   checkIsOver,
+   MAX_CARD_CHARS,
+   safelyParseJson,
+} from "../../utils/helpers";
 
 const memoryCard = memoryCards[2];
 
@@ -28,10 +32,12 @@ export default class Edit extends React.Component {
       this.setState({ answerText: e.target.value }); // set the state of imageryText to be whatever the user inputs in that field (e.target.value)
    }
 
-   displayDeleteButton() {
-      this.setState({
-         isDisplayingDeleteButton: !this.state.isDisplayingDeleteButton,
-      });
+   updateState(e) {
+      let value = e.target.value;
+      if (value === "true" || value === "false") {
+         value = safelyParseJson(value); // "true" will turn into true
+      }
+      this.setState({ [e.target.name]: value });
    }
 
    checkHasInvalidCharCount() {
@@ -143,20 +149,22 @@ export default class Edit extends React.Component {
                </div>
             </div>
 
-            <div
-               className="custom-control custom-checkbox mt-5 mb-3"
-               onClick={() => {
-                  this.displayDeleteButton();
-               }}
-            >
+            <div className="custom-control custom-checkbox mt-5 mb-3">
                <input
                   type="checkbox"
                   className="custom-control-input"
-                  id="show-delete"
+                  id="isDisplayingDeleteButton"
+                  checked={this.state.isDisplayingDeleteButton} //check the isAdvancedView object
+                  name="isDisplayingDeleteButton"
+                  value={!this.state.isDisplayingDeleteButton}
+                  onChange={(e) => {
+                     this.updateState(e);
+                  }}
                />
+
                <label
                   className="custom-control-label text-muted"
-                  htmlFor="show-delete"
+                  htmlFor="isDisplayingDeleteButton"
                >
                   Show delete button
                </label>
