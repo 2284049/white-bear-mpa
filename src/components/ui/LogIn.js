@@ -55,7 +55,7 @@ class LogIn extends React.Component {
          .value;
       await this.setPasswordState(passwordInput, emailInput);
       if (
-         this.state.hasPasswordError === false &&
+         this.state.hasEmailError === false &&
          this.state.hasPasswordError === false
       ) {
          const user = {

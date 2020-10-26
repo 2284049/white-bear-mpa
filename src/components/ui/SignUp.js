@@ -27,13 +27,13 @@ class SignUp extends React.Component {
 
    async setEmailState(emailInput) {
       const lowerCasedEmail = emailInput.toLowerCase(); // make their input lowercase
-      if (emailInput === "")
+      if (emailInput === "") {
          // if the email input is blank,
          this.setState({
             emailError: "Please enter your email address.", // display this error
             hasEmailError: true, // make the input box red with is-invalid class
          });
-      else if (!EMAIL_REGEX.test(lowerCasedEmail)) {
+      } else if (!EMAIL_REGEX.test(lowerCasedEmail)) {
          // if email does not follow regex format,
          this.setState({
             emailError: "Please enter a valid email address.", //display this error
@@ -87,7 +87,7 @@ class SignUp extends React.Component {
          .value;
       await this.setPasswordState(passwordInput, emailInput);
       if (
-         this.state.hasPasswordError === false &&
+         this.state.hasEmailError === false &&
          this.state.hasPasswordError === false
       ) {
          const user = {
@@ -130,7 +130,7 @@ class SignUp extends React.Component {
                               type="email"
                               className={classnames({
                                  "form-control": true,
-                                 "is-invalid": this.state.emailError, // is-invalid class will display when emailError state equals true
+                                 "is-invalid": this.state.hasEmailError, // is-invalid class will display when emailError state equals true
                               })}
                               id="signup-email-input"
                            />
@@ -156,7 +156,7 @@ class SignUp extends React.Component {
                               type="password"
                               className={classnames({
                                  "form-control": true,
-                                 "is-invalid": this.state.passwordError, // is-invalid class will display when emailError state equals true
+                                 "is-invalid": this.state.hasPasswordError, // is-invalid class will display when emailError state equals true
                               })}
                               id="signup-password-input"
                            />
