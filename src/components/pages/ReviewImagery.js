@@ -8,24 +8,33 @@ import actions from "../../store/actions";
 class ReviewImagery extends React.Component {
    constructor(props) {
       super(props);
-      axios
-         .get("https://run.mocky.io/v3/cd3b2851-1a2d-46f4-a491-3ce34f57d4f7")
-         .then(function (res) {
-            // handle success
-            console.log(res);
-            props.dispatch({
-               type: actions.STORE_QUEUED_CARDS,
-               payload: res.data,
+      if (props.queue.cards.length === 0) {
+         // if this is an empty array, then:
+         axios
+            .get("https://run.mocky.io/v3/cd3b2851-1a2d-46f4-a491-3ce34f57d4f7")
+            .then(function (res) {
+               // handle success
+               console.log(res);
+               props.dispatch({
+                  type: actions.STORE_QUEUED_CARDS,
+                  payload: res.data,
+               });
+            })
+            .catch(function (error) {
+               // handle error
             });
-         })
-         .catch(function (error) {
-            // handle error
-         });
+      }
+   }
+
+   goToPrevCard() {
+      this.props.dispatch({
+         type: actions.DECREMENT_QUEUE_INDEX,
+      });
+      this.props.history.push("/review-answer");
    }
 
    render() {
       const memoryCard = this.props.queue.cards[this.props.queue.index];
-      console.log({ memoryCard });
       return (
          <AppTemplate>
             <div className="card mb-5">
@@ -33,8 +42,17 @@ class ReviewImagery extends React.Component {
                   {memoryCard && memoryCard.imagery}
                </div>
             </div>
+            {this.props.queue.index > 0 && (
+               <button
+                  className="btn btn-link mt-1"
+                  onClick={() => {
+                     this.goToPrevCard();
+                  }}
+               >
+                  Previous card
+               </button>
+            )}
 
-            <button className="btn btn-link mt-1">Previous card</button>
             <Link
                to="/review-answer"
                className="btn btn-outline-primary float-right"

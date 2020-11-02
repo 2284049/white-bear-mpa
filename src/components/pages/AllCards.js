@@ -1,17 +1,44 @@
 import React from "react";
 import AppTemplate from "../ui/AppTemplate";
 import MemoryCard from "../ui/MemoryCard";
-import memoryCards from "../../mock-data/memory-cards";
 import orderBy from "lodash/orderBy";
+import axios from "axios";
+
+// THIS PAGE IS A GOOD EXAMPLE OF
+// ***** LOCAL STATE *****
+// We don't need "all cards" anywhere else.
+// On other pages, we are using the list of queued cards, which has global state.
 
 export default class AllCards extends React.Component {
    constructor(props) {
       super(props);
+
       this.state = {
          orderSelection: '[["createdAt"], ["desc"]]', // choosing from the dropdown "most recent"
-         displayedMemoryCards: orderBy(memoryCards, ["createdAt"], ["desc"]), // setting the order of the cards to the most recent parameters
-         allMemoryCards: orderBy(memoryCards, ["createdAt"], ["desc"]),
+         displayedMemoryCards: [], // setting the order of the cards to the most recent parameters
+         allMemoryCards: [],
       };
+   }
+
+   componentDidMount() {
+      axios
+         .get("https://run.mocky.io/v3/cd3b2851-1a2d-46f4-a491-3ce34f57d4f7")
+         .then((res) => {
+            // handle success
+            console.log(res);
+            const memoryCards = res.data;
+            this.setState({
+               displayedMemoryCards: orderBy(
+                  memoryCards,
+                  ["createdAt"],
+                  ["desc"]
+               ), // setting the order of the cards to the most recent parameters
+               allMemoryCards: orderBy(memoryCards, ["createdAt"], ["desc"]),
+            });
+         })
+         .catch((error) => {
+            // handle error
+         });
    }
 
    filterByInput() {

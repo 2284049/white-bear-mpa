@@ -6,11 +6,15 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class ReviewAnswer extends React.Component {
-   // TODO: if index of current card = length of the array of all cards // we've gone to the end of hte cards//
-   // then show out of cards component
    goToNextCard() {
-      this.props.dispatch({ type: actions.UPDATE_INDEX_OF_CURRENT_CARD });
-      this.props.history.push("/review-imagery");
+      if (this.props.queue.index === this.props.queue.cards.length - 1) {
+         // you're on the last card
+         this.props.dispatch({ type: actions.INCREMENT_QUEUE_INDEX }); // without this, it won't go back to the last card, it will go from card 4 to card 3
+         this.props.history.push("/review-empty");
+      } else {
+         this.props.dispatch({ type: actions.INCREMENT_QUEUE_INDEX });
+         this.props.history.push("/review-imagery");
+      }
    }
 
    render() {

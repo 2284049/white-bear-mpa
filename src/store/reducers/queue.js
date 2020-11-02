@@ -6,9 +6,16 @@ export default function queue(queue = {}, action) {
       case actions.STORE_QUEUED_CARDS:
          newQueue.cards = action.payload;
          return newQueue; // new state
-      case actions.UPDATE_INDEX_OF_CURRENT_CARD:
+      case actions.INCREMENT_QUEUE_INDEX:
          newQueue.index += 1;
          return newQueue; // new state
+      case actions.DECREMENT_QUEUE_INDEX:
+         newQueue.index -= 1;
+         return newQueue; // new state
+      case actions.RESET_QUEUE:
+         newQueue.cards = [];
+         newQueue.index = 0;
+         return newQueue;
       default:
          return queue;
    }
