@@ -4,6 +4,7 @@ import hash from "object-hash";
 import { v4 as getUuid } from "uuid";
 import { withRouter } from "react-router-dom";
 import { EMAIL_REGEX } from "../../utils/helpers";
+import axios from "axios";
 
 class LogIn extends React.Component {
    // this function turned into a class will have a bunch of functions in it
@@ -15,6 +16,19 @@ class LogIn extends React.Component {
          hasEmailError: false,
          hasPasswordError: false,
       };
+   }
+
+   componentDidMount() {
+      axios
+         .get("https://run.mocky.io/v3/cd3b2851-1a2d-46f4-a491-3ce34f57d4f7")
+         .then((res) => {
+            // handle success
+            const currentUser = res.data;
+            console.log(currentUser);
+         })
+         .catch((error) => {
+            // handle error
+         });
    }
 
    async setEmailState(emailInput) {
