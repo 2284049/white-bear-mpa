@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function Navigation() {
    const url = window.location.pathname;
-   console.log(url);
    const tabActiveOnCreate = (url) => {
       if (
          url.indexOf("create-answer") > 0 ||
