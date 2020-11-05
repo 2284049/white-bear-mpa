@@ -5,6 +5,9 @@ import hash from "object-hash";
 import { v4 as getUuid } from "uuid";
 import { withRouter } from "react-router-dom";
 import { EMAIL_REGEX } from "../../utils/helpers";
+import axios from "axios";
+import actions from "../../store/actions";
+import { connect } from "react-redux";
 
 class SignUp extends React.Component {
    // this function turned into a class will have a bunch of functions in it
@@ -97,6 +100,24 @@ class SignUp extends React.Component {
             createdAt: Date.now(),
          };
          console.log(user);
+         console.log("Created user object for POST: ", user); // mimics API response
+         axios // WE WANT THE API CALL TO HAPPEN AFTER THEY'VE BEEN VALIDATED
+            .get(
+               "https://raw.githubusercontent.com/2284049/white-bear-mpa/main/src/mock-data/user.json"
+            )
+            .then((res) => {
+               // handle success
+               const currentUser = res.data;
+               console.log(currentUser);
+               this.props.dispatch({
+                  // HAD TO HAVE "THIS" FOR PROPS ERROR TO GO AWAY
+                  type: actions.UPDATE_CURRENT_USER,
+                  payload: res.data,
+               });
+            })
+            .catch((error) => {
+               // handle error
+            });
          this.props.history.push("/create-answer");
       }
    }
@@ -207,4 +228,8 @@ class SignUp extends React.Component {
    }
 }
 
-export default withRouter(SignUp);
+function mapStateToProps(state) {
+   //global state
+   return {};
+}
+export default withRouter(connect(mapStateToProps)(SignUp));

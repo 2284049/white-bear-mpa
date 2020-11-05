@@ -5,6 +5,8 @@ import { v4 as getUuid } from "uuid";
 import { withRouter } from "react-router-dom";
 import { EMAIL_REGEX } from "../../utils/helpers";
 import axios from "axios";
+import actions from "../../store/actions";
+import { connect } from "react-redux";
 
 class LogIn extends React.Component {
    // this function turned into a class will have a bunch of functions in it
@@ -16,19 +18,6 @@ class LogIn extends React.Component {
          hasEmailError: false,
          hasPasswordError: false,
       };
-   }
-
-   componentDidMount() {
-      axios
-         .get("https://run.mocky.io/v3/cd3b2851-1a2d-46f4-a491-3ce34f57d4f7")
-         .then((res) => {
-            // handle success
-            const currentUser = res.data;
-            console.log(currentUser);
-         })
-         .catch((error) => {
-            // handle error
-         });
    }
 
    async setEmailState(emailInput) {
@@ -78,7 +67,24 @@ class LogIn extends React.Component {
             password: hash(passwordInput),
             loggedInAt: Date.now(),
          };
-         console.log(user);
+         console.log("Created user object for POST: ", user); // mimics API response
+         axios // WE WANT THE API CALL TO HAPPEN AFTER THEY'VE BEEN VALIDATED
+            .get(
+               "https://raw.githubusercontent.com/2284049/white-bear-mpa/main/src/mock-data/user.json"
+            )
+            .then((res) => {
+               // handle success
+               const currentUser = res.data;
+               console.log(currentUser);
+               this.props.dispatch({
+                  // HAD TO HAVE "THIS" FOR PROPS ERROR TO GO AWAY
+                  type: actions.UPDATE_CURRENT_USER,
+                  payload: res.data,
+               });
+            })
+            .catch((error) => {
+               // handle error
+            });
          // TO TAKE THE VALIDATED USER TO NEXT PAGE
          // First, put up top: import { withRouter } from "react-router-dom";
          // take out the export defult at top and put on bottom of page like this: export default withRouter(LogIn);
@@ -158,4 +164,8 @@ class LogIn extends React.Component {
    }
 }
 
-export default withRouter(LogIn);
+function mapStateToProps(state) {
+   //global state
+   return {};
+}
+export default withRouter(connect(mapStateToProps)(LogIn));
